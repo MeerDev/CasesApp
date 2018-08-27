@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CasesApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CasesApp.Controllers
 {
@@ -42,6 +43,7 @@ namespace CasesApp.Controllers
             return View(@case);
         }
 
+        [Authorize(Roles = "Worker")]
         // GET: Cases/Create
         public IActionResult Create()
         {

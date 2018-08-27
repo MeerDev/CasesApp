@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CasesApp.Controllers
 {
-    public class WorkerController : Controller
+    public class AdminController : Controller
     {
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
