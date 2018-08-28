@@ -40,7 +40,10 @@ namespace CasesApp
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+          
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -75,48 +78,27 @@ namespace CasesApp
            CreateRoles(services).Wait();
         }
 
-        //private async Task CreateUserRoles(IServiceProvider serviceProvider)
-        //{
-        //    var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        //    var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-
-        //    IdentityResult roleResult;
-        //    //Adding Addmin Role
-        //    var roleCheck = await RoleManager.RoleExistsAsync("Admin");
-        //    if (!roleCheck)
-        //    {
-        //        //create the roles and seed them to the database
-        //        roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
-        //    }
-        //    //Asign Admin role to the main User here i have given my login id for Admin management
-        //    ApplicationUser user = await UserManager.FindByEmailAsync("hallke88@hotmail.com");
-        //    var User = new ApplicationUser();
-        //    await UserManager.AddToRoleAsync(user, "Admin");
-
-        //}
-
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             //initializing custom roles 
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
             string[] roleNames = { "Admin", "Approver", "Reviewer", "Worker" };
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)
             {
-                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
                 // ensure that the role does not exist
                 if (!roleExist)
                 {
                     //create the roles and seed them to the database: 
-                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                    roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
 
             // find the user with the admin email 
-            var _user = await UserManager.FindByEmailAsync("hallke88@hotmail.com");
+            var _user = await userManager.FindByEmailAsync("hallke88@hotmail.com");
 
             // check if the user exists
             if (_user == null)
@@ -129,11 +111,11 @@ namespace CasesApp
                 };
                 string adminPassword = "P@ssw0rd";
 
-                var createPowerUser = await UserManager.CreateAsync(poweruser, adminPassword);
+                var createPowerUser = await userManager.CreateAsync(poweruser, adminPassword);
                 if (createPowerUser.Succeeded)
                 {
                     //here we tie the new user to the role
-                    await UserManager.AddToRoleAsync(poweruser, "Admin");
+                    await userManager.AddToRoleAsync(poweruser, "Admin");
 
                 }
             }
