@@ -12,5 +12,7 @@ namespace CasesApp.Data
             : base(options)
         {
         }
+
+        public DbSet<CasesApp.Models.Case> Case { get; set; }
     }
 }

@@ -7,14 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CasesApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using CasesApp.Data;
 
 namespace CasesApp.Controllers
 {
     public class CasesController : Controller
     {
-        private readonly CasesAppContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CasesController(CasesAppContext context)
+        public CasesController(ApplicationDbContext context)
         {
             _context = context;
         }

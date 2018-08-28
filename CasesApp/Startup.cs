@@ -28,9 +28,6 @@ namespace CasesApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -46,9 +43,6 @@ namespace CasesApp
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.AddDbContext<CasesAppContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("CasesAppContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,7 +72,7 @@ namespace CasesApp
                     template: "{controller=Cases}/{action=Index}/{id?}");
             });
 
-           // CreateRoles(services).Wait();
+           CreateRoles(services).Wait();
         }
 
         //private async Task CreateUserRoles(IServiceProvider serviceProvider)
