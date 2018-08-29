@@ -97,12 +97,14 @@ namespace CasesApp.Data
                 IdentityUser approver2 = await userManager.FindByEmailAsync("approver2@hotmail.com");
                 IdentityUser approver3 = await userManager.FindByEmailAsync("approver3@hotmail.com");
 
-                Case testCase1 = new Case { Title = "Test Case 1", Details = "Case Details", Worker = worker1, Reviewer = reviewer1, Approver = approver1, DateCreated = new DateTime(2018, 08, 20), DateReviewed = null, DateApproved = null, Status = CaseStatus.Pending };
-                Case testCase2 = new Case { Title = "Test Case 2", Details = "Case Details", Worker = worker3, Reviewer = reviewer1, Approver = approver3, DateCreated = new DateTime(2018, 08, 22), DateReviewed = null, DateApproved = null, Status = CaseStatus.PendingReview };
-                Case testCase3 = new Case { Title = "Test Case 3", Details = "Case Details", Worker = worker2, Reviewer = reviewer2, Approver = approver2, DateCreated = new DateTime(2018, 08, 18), DateReviewed = new DateTime(2018, 08, 22), DateApproved = null, Status = CaseStatus.PendingApproval };
-                Case testCase4 = new Case { Title = "Test Case 4", Details = "Case Details", Worker = worker2, Reviewer = reviewer3, Approver = approver3, DateCreated = new DateTime(2018, 08, 20), DateReviewed = new DateTime(2018, 08, 27), DateApproved = null, Status = CaseStatus.PendingApproval };
-                Case testCase5 = new Case { Title = "Test Case 5", Details = "Case Details", Worker = worker1, Reviewer = reviewer3, Approver = approver2, DateCreated = new DateTime(2018, 08, 20), DateReviewed = new DateTime(2018, 08, 24), DateApproved = new DateTime(2018, 08, 25), Status = CaseStatus.Approved };
-                Case testCase6 = new Case { Title = "Test Case 6", Details = "Case Details", Worker = worker3, Reviewer = reviewer1, Approver = approver1, DateCreated = new DateTime(2018, 08, 21), DateReviewed = new DateTime(2018, 08, 22), DateApproved = new DateTime(2018, 08, 22), Status = CaseStatus.Approved };
+               
+
+                Case testCase1 = new Case { Title = "Test Case 1", Details = "Case Details", WorkerID = worker1.Id, ReviewerID = reviewer1.Id, ApproverID = approver1.Id, DateCreated = new DateTime(2018, 08, 20), DateReviewed = null, DateApproved = null, Status = CaseStatus.Pending };
+                Case testCase2 = new Case { Title = "Test Case 2", Details = "Case Details", WorkerID = worker3.Id, ReviewerID = reviewer1.Id, ApproverID = approver3.Id, DateCreated = new DateTime(2018, 08, 22), DateReviewed = null, DateApproved = null, Status = CaseStatus.PendingReview };
+                Case testCase3 = new Case { Title = "Test Case 3", Details = "Case Details", WorkerID = worker2.Id, ReviewerID = reviewer2.Id, ApproverID = approver2.Id, DateCreated = new DateTime(2018, 08, 18), DateReviewed = new DateTime(2018, 08, 22), DateApproved = null, Status = CaseStatus.PendingApproval };
+                Case testCase4 = new Case { Title = "Test Case 4", Details = "Case Details", WorkerID = worker2.Id, ReviewerID = reviewer3.Id, ApproverID = approver3.Id, DateCreated = new DateTime(2018, 08, 20), DateReviewed = new DateTime(2018, 08, 27), DateApproved = null, Status = CaseStatus.PendingApproval };
+                Case testCase5 = new Case { Title = "Test Case 5", Details = "Case Details", WorkerID = worker1.Id, ReviewerID = reviewer3.Id, ApproverID = approver2.Id, DateCreated = new DateTime(2018, 08, 20), DateReviewed = new DateTime(2018, 08, 24), DateApproved = new DateTime(2018, 08, 25), Status = CaseStatus.Approved };
+                Case testCase6 = new Case { Title = "Test Case 6", Details = "Case Details", WorkerID = worker3.Id, ReviewerID = reviewer1.Id, ApproverID = approver1.Id, DateCreated = new DateTime(2018, 08, 21), DateReviewed = new DateTime(2018, 08, 22), DateApproved = new DateTime(2018, 08, 22), Status = CaseStatus.Approved };
 
                 context.Case.Add(testCase1);
                 context.Case.Add(testCase2);

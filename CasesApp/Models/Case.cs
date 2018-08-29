@@ -11,9 +11,9 @@ namespace CasesApp.Models
         public int ID { get; set; }
         public string Title { get; set; }
         public string Details { get; set; }
-        public IdentityUser Worker { get; set; }
-        public IdentityUser Reviewer { get; set; }       
-        public IdentityUser Approver { get; set; }
+        public string WorkerID { get; set; }
+        public string ReviewerID { get; set; }       
+        public string ApproverID { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateReviewed { get; set; }
         public DateTime? DateApproved { get; set; }

@@ -72,9 +72,9 @@ namespace CasesApp.Controllers
             {
                 //  var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 //  Httpcon
-                var userID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                @case.WorkerID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 
-                @case.Worker = await _userManager.FindByIdAsync(userID);
+               // @case.WorkerID = await _userManager.FindByIdAsync(userID);
                 _caseService.Add(@case);
                 return RedirectToAction(nameof(Index));
             }
