@@ -70,9 +70,6 @@ namespace CasesApp.Services
             Case caseToGet = _dbContext.Case
                 .Include(x => x.Title)
                 .Include(x => x.Details)
-                .Include(x => x.WorkerID)
-                .Include(x => x.ReviewerID)
-                .Include(x => x.ApproverID)
                 .Include(x => x.DateCreated)
                 .Include(x => x.DateReviewed)
                 .Include(x => x.DateApproved)
