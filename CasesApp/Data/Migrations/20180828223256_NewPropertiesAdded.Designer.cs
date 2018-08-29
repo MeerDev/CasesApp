@@ -4,14 +4,16 @@ using CasesApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CasesApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180828223256_NewPropertiesAdded")]
+    partial class NewPropertiesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,29 +29,23 @@ namespace CasesApp.Data.Migrations
 
                     b.Property<DateTimeOffset?>("ApproveDate");
 
-                    b.Property<string>("ApproverId");
+                    b.Property<string>("Approver");
 
                     b.Property<DateTimeOffset>("CreateDate");
 
                     b.Property<string>("Details");
 
-                    b.Property<DateTimeOffset?>("ReviewDate");
+                    b.Property<DateTimeOffset?>("RevieweDate");
 
-                    b.Property<string>("ReviewerId");
+                    b.Property<string>("Reviewer");
 
                     b.Property<int>("Status");
 
                     b.Property<string>("Title");
 
-                    b.Property<string>("WorkerId");
+                    b.Property<string>("Worker");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("ApproverId");
-
-                    b.HasIndex("ReviewerId");
-
-                    b.HasIndex("WorkerId");
 
                     b.ToTable("Case");
                 });
@@ -108,9 +104,6 @@ namespace CasesApp.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -150,8 +143,6 @@ namespace CasesApp.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -222,31 +213,6 @@ namespace CasesApp.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("CasesApp.Models.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-
-                    b.ToTable("ApplicationUser");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
-                });
-
-            modelBuilder.Entity("CasesApp.Models.Case", b =>
-                {
-                    b.HasOne("CasesApp.Models.ApplicationUser", "Approver")
-                        .WithMany()
-                        .HasForeignKey("ApproverId");
-
-                    b.HasOne("CasesApp.Models.ApplicationUser", "Reviewer")
-                        .WithMany()
-                        .HasForeignKey("ReviewerId");
-
-                    b.HasOne("CasesApp.Models.ApplicationUser", "Worker")
-                        .WithMany()
-                        .HasForeignKey("WorkerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

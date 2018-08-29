@@ -8,12 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using CasesApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using CasesApp.Data;
+using CasesApp.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace CasesApp.Controllers
 {
     public class CasesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private CaseService _caseService;
+        private UserManager<ApplicationUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
 
         public CasesController(ApplicationDbContext context)
         {
@@ -44,7 +52,7 @@ namespace CasesApp.Controllers
             return View(@case);
         }
 
-        [Authorize(Roles = "Worker")]
+       // [Authorize(Roles = "Worker")]
         // GET: Cases/Create
         public IActionResult Create()
         {
@@ -56,17 +64,21 @@ namespace CasesApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Details,Worker,Reviewer,Approver,Status")] Case @case)
+       // [Authorize(Roles = "Worker")]
+        public async Task<IActionResult> Create([Bind("ID,Title,Details,Worker,CreateDate")] Case @case)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@case);
-                await _context.SaveChangesAsync();
+                var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                @case.Worker = await _userManager.FindByIdAsync(userID);
+                _caseService.Add(@case);
                 return RedirectToAction(nameof(Index));
             }
             return View(@case);
         }
 
+        [HttpPost]
+       // [Authorize(Roles = "Worker")]
         // GET: Cases/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
