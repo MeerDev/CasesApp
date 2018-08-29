@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CasesApp.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,6 +20,7 @@ namespace CasesApp.Data
 
             await SeedRoles(roleManager);
             await SeedUsers(userManager);
+            await SeedCases(dbContext, userManager);
         }
 
         private static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
@@ -28,7 +30,6 @@ namespace CasesApp.Data
             
             if (!roleExist)
             {
-                //create the roles and seed them to the database: 
                 roleResult = await roleManager.CreateAsync(new IdentityRole(Roles.Worker));
             }
 
@@ -36,7 +37,6 @@ namespace CasesApp.Data
 
             if (!roleExist)
             {
-                //create the roles and seed them to the database: 
                 roleResult = await roleManager.CreateAsync(new IdentityRole(Roles.Reviewer));
             }
 
@@ -44,24 +44,23 @@ namespace CasesApp.Data
 
             if (!roleExist)
             {
-                //create the roles and seed them to the database: 
                 roleResult = await roleManager.CreateAsync(new IdentityRole(Roles.Approver));
             }
         }
 
         private static async Task SeedUsers(UserManager<IdentityUser> userManager)
         {
-            await SeedUser(userManager, "worker1", "worker1@hotmail.com", Roles.Worker);
-            await SeedUser(userManager, "worker2", "worker2@hotmail.com", Roles.Worker);
-            await SeedUser(userManager, "worker3", "worker3@hotmail.com", Roles.Worker);
+            await SeedUser(userManager, "worker1@hotmail.com", "worker1@hotmail.com", Roles.Worker);
+            await SeedUser(userManager, "worker2@hotmail.com", "worker2@hotmail.com", Roles.Worker);
+            await SeedUser(userManager, "worker3@hotmail.com", "worker3@hotmail.com", Roles.Worker);
 
-            await SeedUser(userManager, "reviewer1", "reviewer1@hotmail.com", Roles.Reviewer);
-            await SeedUser(userManager, "reviewer2", "reviewer2@hotmail.com", Roles.Reviewer);
-            await SeedUser(userManager, "reviewer3", "reviewer3@hotmail.com", Roles.Reviewer);
+            await SeedUser(userManager, "reviewer1@hotmail.com", "reviewer1@hotmail.com", Roles.Reviewer);
+            await SeedUser(userManager, "reviewer2@hotmail.com", "reviewer2@hotmail.com", Roles.Reviewer);
+            await SeedUser(userManager, "reviewer3@hotmail.com", "reviewer3@hotmail.com", Roles.Reviewer);
 
-            await SeedUser(userManager, "approver1", "approver1@hotmail.com", Roles.Approver);
-            await SeedUser(userManager, "approver2", "approver2@hotmail.com", Roles.Approver);
-            await SeedUser(userManager, "approver3", "approver3@hotmail.com", Roles.Approver);
+            await SeedUser(userManager, "approver1@hotmail.com", "approver1@hotmail.com", Roles.Approver);
+            await SeedUser(userManager, "approver2@hotmail.com", "approver2@hotmail.com", Roles.Approver);
+            await SeedUser(userManager, "approver3@hotmail.com", "approver3@hotmail.com", Roles.Approver);
         }
 
         private static async Task SeedUser(UserManager<IdentityUser> userManager, string userName, string email, string role)
@@ -82,6 +81,39 @@ namespace CasesApp.Data
 
 
             }
+        }
+
+        private static async Task SeedCases(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        {
+            if (!context.Case.Any())
+            {
+                IdentityUser worker1 = await userManager.FindByEmailAsync("worker1@hotmail.com");
+                IdentityUser worker2 = await userManager.FindByEmailAsync("worker2@hotmail.com");
+                IdentityUser worker3 = await userManager.FindByEmailAsync("worker3@hotmail.com");
+                IdentityUser reviewer1 = await userManager.FindByEmailAsync("reviewer1@hotmail.com");
+                IdentityUser reviewer2 = await userManager.FindByEmailAsync("reviewer2@hotmail.com");
+                IdentityUser reviewer3 = await userManager.FindByEmailAsync("reviewer3@hotmail.com");
+                IdentityUser approver1 = await userManager.FindByEmailAsync("approver1@hotmail.com");
+                IdentityUser approver2 = await userManager.FindByEmailAsync("approver2@hotmail.com");
+                IdentityUser approver3 = await userManager.FindByEmailAsync("approver3@hotmail.com");
+
+                Case testCase1 = new Case { Title = "Test Case 1", Details = "Case Details", Worker = worker1, Reviewer = reviewer1, Approver = approver1, DateCreated = new DateTime(2018, 08, 20), DateReviewed = null, DateApproved = null, Status = CaseStatus.Pending };
+                Case testCase2 = new Case { Title = "Test Case 2", Details = "Case Details", Worker = worker3, Reviewer = reviewer1, Approver = approver3, DateCreated = new DateTime(2018, 08, 22), DateReviewed = null, DateApproved = null, Status = CaseStatus.PendingReview };
+                Case testCase3 = new Case { Title = "Test Case 3", Details = "Case Details", Worker = worker2, Reviewer = reviewer2, Approver = approver2, DateCreated = new DateTime(2018, 08, 18), DateReviewed = new DateTime(2018, 08, 22), DateApproved = null, Status = CaseStatus.PendingApproval };
+                Case testCase4 = new Case { Title = "Test Case 4", Details = "Case Details", Worker = worker2, Reviewer = reviewer3, Approver = approver3, DateCreated = new DateTime(2018, 08, 20), DateReviewed = new DateTime(2018, 08, 27), DateApproved = null, Status = CaseStatus.PendingApproval };
+                Case testCase5 = new Case { Title = "Test Case 5", Details = "Case Details", Worker = worker1, Reviewer = reviewer3, Approver = approver2, DateCreated = new DateTime(2018, 08, 20), DateReviewed = new DateTime(2018, 08, 24), DateApproved = new DateTime(2018, 08, 25), Status = CaseStatus.Approved };
+                Case testCase6 = new Case { Title = "Test Case 6", Details = "Case Details", Worker = worker3, Reviewer = reviewer1, Approver = approver1, DateCreated = new DateTime(2018, 08, 21), DateReviewed = new DateTime(2018, 08, 22), DateApproved = new DateTime(2018, 08, 22), Status = CaseStatus.Approved };
+
+                context.Case.Add(testCase1);
+                context.Case.Add(testCase2);
+                context.Case.Add(testCase3);
+                context.Case.Add(testCase4);
+                context.Case.Add(testCase5);
+                context.Case.Add(testCase6);
+
+                context.SaveChanges();
+            }
+
         }
     }
 }

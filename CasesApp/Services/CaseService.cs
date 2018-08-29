@@ -36,7 +36,7 @@ namespace CasesApp.Services
         public Case Add(Case caseToAdd)
         {
             caseToAdd.Status = CaseStatus.Pending;
-            caseToAdd.CreateDate = DateTimeOffset.Now;
+            caseToAdd.DateCreated = DateTime.Now;
             _dbContext.Case.Add(caseToAdd);
             _dbContext.SaveChanges();
 

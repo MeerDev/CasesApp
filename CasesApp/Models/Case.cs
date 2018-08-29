@@ -14,18 +14,19 @@ namespace CasesApp.Models
         public IdentityUser Worker { get; set; }
         public IdentityUser Reviewer { get; set; }       
         public IdentityUser Approver { get; set; }
-        public DateTimeOffset CreateDate { get; set; }
-        public DateTimeOffset? ReviewDate { get; set; }
-        public DateTimeOffset? ApproveDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateReviewed { get; set; }
+        public DateTime? DateApproved { get; set; }
         //Status values are Pending, Reviewed and Approved
         public CaseStatus Status { get; set; }
     }
 
     public enum CaseStatus
     {
-        Pending = 0,
-        Reviewed = 1,
-        Approved = 2
+        Pending,
+        PendingReview,
+        PendingApproval,
+        Approved
     }
 }
 

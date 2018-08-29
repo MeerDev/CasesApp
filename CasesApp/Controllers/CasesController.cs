@@ -53,7 +53,7 @@ namespace CasesApp.Controllers
             return View(@case);
         }
 
-       // [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker")]
         // GET: Cases/Create
         public IActionResult Create()
         {
@@ -65,7 +65,7 @@ namespace CasesApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-       // [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> Create([Bind("ID,Title,Details,Worker,CreateDate")] Case @case)
         {
             if (ModelState.IsValid)
@@ -82,7 +82,7 @@ namespace CasesApp.Controllers
         }
 
         [HttpPost]
-       // [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker")]
         // GET: Cases/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
