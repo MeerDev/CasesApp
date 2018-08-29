@@ -19,13 +19,14 @@ namespace CasesApp.Controllers
     {
         private readonly ApplicationDbContext _context;
         private CaseService _caseService;
-        private UserManager<ApplicationUser> _userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<IdentityUser> _userManager;
 
 
-        public CasesController(ApplicationDbContext context)
+        public CasesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
-            _context = context;
+            _context = context;            
+            _caseService = new CaseService(_context);
+            _userManager = userManager;
         }
 
         // GET: Cases
@@ -69,7 +70,10 @@ namespace CasesApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                //  var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                //  Httpcon
+                var userID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                
                 @case.Worker = await _userManager.FindByIdAsync(userID);
                 _caseService.Add(@case);
                 return RedirectToAction(nameof(Index));

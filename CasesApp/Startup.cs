@@ -43,8 +43,7 @@ namespace CasesApp
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-          
-
+          //  services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -75,7 +74,7 @@ namespace CasesApp
                     template: "{controller=Cases}/{action=Index}/{id?}");
             });
 
-           CreateRoles(services).Wait();
+          // CreateRoles(services).Wait();
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
@@ -104,7 +103,7 @@ namespace CasesApp
             if (_user == null)
             {
                 //Here you could create the super admin who will maintain the web app
-                var poweruser = new ApplicationUser
+                var poweruser = new IdentityUser
                 {
                     UserName = "Admin",
                     Email = "hallke88@hotmail.com",
