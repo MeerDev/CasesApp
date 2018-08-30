@@ -84,7 +84,6 @@ namespace CasesApp.Services
         public List<Case> GetAll()
         {
             List<Case> casesToReview = _dbContext.Case
-                .Include(x => x.Title)
                 .OrderByDescending(x => x.Title).ToList();
             return casesToReview;
         }

@@ -5,7 +5,6 @@ using CasesApp.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CasesApp.Services;
 using CasesApp.Data;
-using Moq;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -18,18 +17,26 @@ namespace UnitTests
 
         public CaseUnitTests()
         {
-            var mockSet = new Mock<DbSet<Case>>();
-            var mockContext = new Mock<ApplicationDbContext>();
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestCasesDB")
+                .Options;
 
-            mockContext.Setup(m => m.Case).Returns(mockSet.Object);
+            var context = new ApplicationDbContext(options);
 
-            var _caseService = new CaseService(mockContext.Object);
+            _caseService = new CaseService(context);
+
+            Case caseToAdd = new Case { ID = 1, Title = "Test Case 1", Details = "", WorkerID = "worker1id", DateReviewed = null, DateApproved = null, Status = CaseStatus.Pending };
+
+            context.Add(caseToAdd);
+
+            _caseService.Add(caseToAdd);
+
         }
 
         [TestMethod]
         public void Add_CaseNotCreated_CaseIsCreated()
         {                     
-            Case caseToAdd = new Case { Title = "Test Case 1", Details = "", WorkerID = "worker1id", DateReviewed = null, DateApproved = null, Status = CaseStatus.Pending };
+            Case caseToAdd = new Case { Title = "Add Test Case", Details = "Details", WorkerID = "worker1id", DateReviewed = null, DateApproved = null, Status = CaseStatus.Pending };
 
             _caseService.Add(caseToAdd);
 
@@ -37,7 +44,7 @@ namespace UnitTests
             var cases = _caseService.GetAll();
 
 
-            var addedCase = cases.FirstOrDefault(x => x.Title == "Test Case 1");
+            var addedCase = cases.FirstOrDefault(x => x.Title == "Add Test Case");
 
             Assert.IsNotNull(addedCase);
         }
@@ -45,7 +52,8 @@ namespace UnitTests
         [TestMethod]
         public void Edit_DetailsNotSet_DetailsSet()
         {
-            var testCase = _caseService.GetAll().FirstOrDefault();
+            var testCase = _caseService.Get(1);
+           
 
             testCase.Details = "Test Details for the case";
 
@@ -59,7 +67,7 @@ namespace UnitTests
         [TestMethod]
         public void ReadyForReview_CaseNotReadyForReview_CaseIsReadyForReview()
         {
-            var testCase = _caseService.GetAll().FirstOrDefault();
+            var testCase = _caseService.Get(1);
 
             _caseService.ReadyForReview(testCase);
 
@@ -72,7 +80,7 @@ namespace UnitTests
         [TestMethod]
         public void ReadyForApproval_CaseNotReadyForApproval_CaseIsReadyForApproval()
         {
-            var testCase = _caseService.GetAll().FirstOrDefault();
+            var testCase = _caseService.Get(1);
 
             _caseService.ReadyForApproval(testCase);
 
@@ -85,7 +93,7 @@ namespace UnitTests
         [TestMethod]
         public void Approve_CaseIsNotApproved_CaseIsApproved()
         {
-            var testCase = _caseService.GetAll().FirstOrDefault();
+            var testCase = _caseService.Get(1);
 
             _caseService.Approve(testCase);
 
