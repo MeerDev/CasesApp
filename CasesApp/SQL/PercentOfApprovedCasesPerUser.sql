@@ -1,8 +1,9 @@
 CREATE PROCEDURE PercentOfApprovedCasesPerUser
 AS
 BEGIN
+
 	SELECT
-	 t1.UserName, t2.ApprovedCases, t2.PercentOfApproved
+	 t1.UserName, ISNULL(t2.ApprovedCases, 0) AS ApprovedCases, ISNULL(t2.PercentOfApproved, 0) AS PercentOfApproved
 	 FROM
 		(SELECT DISTINCT
 			anu.UserName as UserName
@@ -18,7 +19,6 @@ BEGIN
 		WHERE c.Status = 3
 		GROUP BY anu.UserName) t2
 	ON t1.UserName = t2.UserName
-
 
 END
 GO
