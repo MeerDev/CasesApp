@@ -33,19 +33,18 @@ namespace CasesApp.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var reviewers = await _userManager.GetUsersInRoleAsync("Reviewer");
 
             if (user != null)
             {
-                if (await _userManager.IsInRoleAsync(user, "Reviewer"))
+                if (await _userManager.IsInRoleAsync(user, Constants.Roles.Reviewer))
                 {
                     return View(_caseService.GetCasesToReview());
                 }
-                if (await _userManager.IsInRoleAsync(user, "Worker"))
+                if (await _userManager.IsInRoleAsync(user, Constants.Roles.Worker))
                 {
                     return View(_caseService.GetCasesToWork());
                 }
-                if (await _userManager.IsInRoleAsync(user, "Approver"))
+                if (await _userManager.IsInRoleAsync(user, Constants.Roles.Approver))
                 {
                     return View(_caseService.GetCasesToApprove());
                 }
@@ -106,6 +105,25 @@ namespace CasesApp.Controllers
             if (@case == null)
             {
                 return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userRole = _userManager.GetRolesAsync(user);
+
+            if (user != null)
+            {
+                if (await _userManager.IsInRoleAsync(user, Constants.Roles.Reviewer))
+                {
+                    ViewBag.Role = Constants.Roles.Reviewer;
+                }
+                if (await _userManager.IsInRoleAsync(user, Constants.Roles.Worker))
+                {
+                    ViewBag.Role = Constants.Roles.Worker;
+                }
+                if (await _userManager.IsInRoleAsync(user, Constants.Roles.Approver))
+                {
+                    ViewBag.Role = Constants.Roles.Approver;
+                }
             }
 
             return View(@case);

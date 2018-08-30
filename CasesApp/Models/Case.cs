@@ -20,7 +20,6 @@ namespace CasesApp.Models
         public DateTime DateCreated { get; set; }
         public DateTime? DateReviewed { get; set; }
         public DateTime? DateApproved { get; set; }
-        //Status values are Pending, Reviewed and Approved
         public CaseStatus Status { get; set; }
     }
 
@@ -28,6 +27,24 @@ namespace CasesApp.Models
     {
         Pending,
         PendingReview,
+        PendingApproval,
+        Approved
+    }
+
+    public enum WorkerCaseStatus
+    {
+        Pending,
+        PendingReview
+    }
+
+    public enum ReviewerCaseStatus
+    {
+        Pending,
+        PendingReview,
+        PendingApproval
+    }
+    public enum ApproverCaseStatus
+    {
         PendingApproval,
         Approved
     }
