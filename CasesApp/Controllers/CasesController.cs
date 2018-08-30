@@ -34,6 +34,7 @@ namespace CasesApp.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
+            //Find the role of the current user and get cases depending on the role
             if (user != null)
             {
                 if (await _userManager.IsInRoleAsync(user, Constants.Roles.Reviewer))
@@ -111,7 +112,7 @@ namespace CasesApp.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var userRole = _userManager.GetRolesAsync(user);
 
-            //Find out what role the current user
+            //Find the role of the current user and change the viewbag
             if (user != null)
             {
                 if (await _userManager.IsInRoleAsync(user, Constants.Roles.Reviewer))
