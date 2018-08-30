@@ -107,9 +107,11 @@ namespace CasesApp.Controllers
                 return NotFound();
             }
 
+            //Get current user
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var userRole = _userManager.GetRolesAsync(user);
 
+            //Find out what role the current user
             if (user != null)
             {
                 if (await _userManager.IsInRoleAsync(user, Constants.Roles.Reviewer))

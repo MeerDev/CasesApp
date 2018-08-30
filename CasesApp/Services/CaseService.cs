@@ -52,16 +52,20 @@ namespace CasesApp.Services
 
             caseToUpdate.Title = editedCase.Title;
             caseToUpdate.Details = editedCase.Details;
-            //caseToUpdate.WorkerID = editedCase.WorkerID;
-            //caseToUpdate.WorkerEmail = editedCase.WorkerEmail;
-            //caseToUpdate.ReviewerID = editedCase.ReviewerID;
-            //caseToUpdate.ReviewerEmail = editedCase.ReviewerEmail;
-            //caseToUpdate.ApproverID = editedCase.ApproverID;
-            //caseToUpdate.ApproverEmail = editedCase.ApproverEmail;
-            //caseToUpdate.DateCreated = editedCase.DateCreated;
-            //caseToUpdate.DateReviewed = editedCase.DateReviewed;
-            //caseToUpdate.DateApproved = editedCase.DateApproved;
+
+            //Check if status field has changed
+            if (caseToUpdate.Status != editedCase.Status)
+            {
+                //Check to see if reviewer has flagged for approval
+                if (editedCase.Status == CaseStatus.PendingApproval && caseToUpdate.Status == CaseStatus.PendingReview)
+                    caseToUpdate.DateReviewed = DateTime.UtcNow;
+                if (editedCase.Status == CaseStatus.Approved)
+                    caseToUpdate.DateApproved = DateTime.UtcNow;
+                
+            }
+
             caseToUpdate.Status = editedCase.Status;
+
 
             _dbContext.SaveChanges();
 
