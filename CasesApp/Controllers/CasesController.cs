@@ -32,6 +32,14 @@ namespace CasesApp.Controllers
         // GET: Cases
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var reviewers = await _userManager.GetUsersInRoleAsync("Reviewer");
+
+            
+            //await _userManager.IsInRoleAsync(currentUser, "Reviewer");
+            //if (HttpContext.User.HasClaim(ClaimTypes.Role, "Reviewer"))
+            if (user != null && await _userManager.IsInRoleAsync(user, "Reviewer"))
+                return View(_caseService.GetCasesToReview());
             return View(await _context.Case.ToListAsync());
         }
 

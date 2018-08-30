@@ -20,7 +20,7 @@ namespace CasesApp.Services
         Case SendBackToWorker(Case caseToSendBack);
         Case SendBackToReviewer(Case caseToSendBack);
         IEnumerable<Case> GetAll();
-        IEnumerable<Case> GetCasesToReview();
+        List<Case> GetCasesToReview();
         IEnumerable<Case> GetCasesToApprove();
         IEnumerable<Case> GetApprovedCases();
     }
@@ -52,8 +52,11 @@ namespace CasesApp.Services
             caseToUpdate.Title = editedCase.Title;
             caseToUpdate.Details = editedCase.Details;
             caseToUpdate.WorkerID = editedCase.WorkerID;
+            caseToUpdate.WorkerEmail = editedCase.WorkerEmail;
             caseToUpdate.ReviewerID = editedCase.ReviewerID;
+            caseToUpdate.ReviewerEmail = editedCase.ReviewerEmail;
             caseToUpdate.ApproverID = editedCase.ApproverID;
+            caseToUpdate.ApproverEmail = editedCase.ApproverEmail;
             caseToUpdate.DateCreated = editedCase.DateCreated;
             caseToUpdate.DateReviewed = editedCase.DateReviewed;
             caseToUpdate.DateApproved = editedCase.DateApproved;
@@ -68,11 +71,6 @@ namespace CasesApp.Services
         public Case Get(int caseID)
         {
             Case caseToGet = _dbContext.Case
-                .Include(x => x.Title)
-                .Include(x => x.Details)
-                .Include(x => x.DateCreated)
-                .Include(x => x.DateReviewed)
-                .Include(x => x.DateApproved)
                 .FirstOrDefault(x => x.ID == caseID);
 
             return caseToGet;
@@ -82,32 +80,21 @@ namespace CasesApp.Services
         {
             IEnumerable<Case> casesToReview = _dbContext.Case
                 .Include(x => x.Title)
-                .Include(x => x.WorkerID)
-                .Include(x => x.ReviewerID)
-                .Include(x => x.ApproverID)
                 .OrderByDescending(x => x.Title);
             return casesToReview;
         }
 
-        public IEnumerable<Case> GetCasesToReview()
+        public List<Case> GetCasesToReview()
         {
-            IEnumerable<Case> casesToReview = _dbContext.Case
-                .Include(x => x.Title)
-                .Include(x => x.WorkerID)
-                .Include(x => x.ReviewerID)
-                .Include(x => x.ApproverID)
+            List<Case> casesToReview = _dbContext.Case
                 .Where(x => x.Status == CaseStatus.PendingReview)
-                .OrderByDescending(x => x.Title);
+                .OrderByDescending(x => x.Title).ToList();
             return casesToReview;
         }
 
         public IEnumerable<Case> GetCasesToApprove()
         {
             IEnumerable<Case> casesToApprove = _dbContext.Case
-                .Include(x => x.Title)
-                .Include(x => x.WorkerID)
-                .Include(x => x.ReviewerID)
-                .Include(x => x.ApproverID)
                 .Where(x => x.Status == CaseStatus.PendingApproval)
                 .OrderByDescending(x => x.Title);
             return casesToApprove;
@@ -116,10 +103,6 @@ namespace CasesApp.Services
         public IEnumerable<Case> GetApprovedCases()
         {
             IEnumerable<Case> approvedCases = _dbContext.Case
-                .Include(x => x.Title)
-                .Include(x => x.WorkerID)
-                .Include(x => x.ReviewerID)
-                .Include(x => x.ApproverID)
                 .Where(x => x.Status == CaseStatus.Approved)
                 .OrderByDescending(x => x.Title);
             return approvedCases;
@@ -135,6 +118,7 @@ namespace CasesApp.Services
         public Case ReadyForApproval(Case readyCase)
         {
             readyCase.Status = CaseStatus.PendingApproval;
+            readyCase.DateReviewed = DateTime.UtcNow;
             return Edit(readyCase);
         }
 
@@ -142,6 +126,7 @@ namespace CasesApp.Services
         public Case Approve(Case caseToApprove)
         {
             caseToApprove.Status = CaseStatus.Approved;
+            caseToApprove.DateApproved = DateTime.UtcNow;
             return Edit(caseToApprove);
         }
 
