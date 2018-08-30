@@ -35,11 +35,21 @@ namespace CasesApp.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var reviewers = await _userManager.GetUsersInRoleAsync("Reviewer");
 
-            
-            //await _userManager.IsInRoleAsync(currentUser, "Reviewer");
-            //if (HttpContext.User.HasClaim(ClaimTypes.Role, "Reviewer"))
-            if (user != null && await _userManager.IsInRoleAsync(user, "Reviewer"))
-                return View(_caseService.GetCasesToReview());
+            if (user != null)
+            {
+                if (await _userManager.IsInRoleAsync(user, "Reviewer"))
+                {
+                    return View(_caseService.GetCasesToReview());
+                }
+                if (await _userManager.IsInRoleAsync(user, "Worker"))
+                {
+                    return View(_caseService.GetCasesToWork());
+                }
+                if (await _userManager.IsInRoleAsync(user, "Approver"))
+                {
+                    return View(_caseService.GetCasesToApprove());
+                }
+            }
             return View(await _context.Case.ToListAsync());
         }
 

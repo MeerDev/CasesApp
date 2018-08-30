@@ -19,10 +19,11 @@ namespace CasesApp.Services
         Case Approve(Case caseToApprove);
         Case SendBackToWorker(Case caseToSendBack);
         Case SendBackToReviewer(Case caseToSendBack);
-        IEnumerable<Case> GetAll();
-        List<Case> GetCasesToReview();
-        IEnumerable<Case> GetCasesToApprove();
-        IEnumerable<Case> GetApprovedCases();
+        List<Case> GetAll();
+        List<Case> GetCasesToWork();
+        List<Case> GetCasesToReview();       
+        List<Case> GetCasesToApprove();
+        List<Case> GetApprovedCases();
     }
 
     public class CaseService : ICaseService
@@ -76,14 +77,21 @@ namespace CasesApp.Services
             return caseToGet;
         }
 
-        public IEnumerable<Case> GetAll()
+        public List<Case> GetAll()
         {
-            IEnumerable<Case> casesToReview = _dbContext.Case
+            List<Case> casesToReview = _dbContext.Case
                 .Include(x => x.Title)
-                .OrderByDescending(x => x.Title);
+                .OrderByDescending(x => x.Title).ToList();
             return casesToReview;
         }
 
+        public List<Case> GetCasesToWork()
+        {
+            List<Case> casesToWork = _dbContext.Case
+                .Where(x => x.Status == CaseStatus.Pending)
+                .OrderByDescending(x => x.Title).ToList();
+            return casesToWork;
+        }
         public List<Case> GetCasesToReview()
         {
             List<Case> casesToReview = _dbContext.Case
@@ -92,19 +100,19 @@ namespace CasesApp.Services
             return casesToReview;
         }
 
-        public IEnumerable<Case> GetCasesToApprove()
+        public List<Case> GetCasesToApprove()
         {
-            IEnumerable<Case> casesToApprove = _dbContext.Case
+            List<Case> casesToApprove = _dbContext.Case
                 .Where(x => x.Status == CaseStatus.PendingApproval)
-                .OrderByDescending(x => x.Title);
+                .OrderByDescending(x => x.Title).ToList();
             return casesToApprove;
         }
 
-        public IEnumerable<Case> GetApprovedCases()
+        public List<Case> GetApprovedCases()
         {
-            IEnumerable<Case> approvedCases = _dbContext.Case
+            List<Case> approvedCases = _dbContext.Case
                 .Where(x => x.Status == CaseStatus.Approved)
-                .OrderByDescending(x => x.Title);
+                .OrderByDescending(x => x.Title).ToList();
             return approvedCases;
         }
 
