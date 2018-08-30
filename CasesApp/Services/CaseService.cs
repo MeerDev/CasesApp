@@ -52,15 +52,15 @@ namespace CasesApp.Services
 
             caseToUpdate.Title = editedCase.Title;
             caseToUpdate.Details = editedCase.Details;
-            caseToUpdate.WorkerID = editedCase.WorkerID;
-            caseToUpdate.WorkerEmail = editedCase.WorkerEmail;
-            caseToUpdate.ReviewerID = editedCase.ReviewerID;
-            caseToUpdate.ReviewerEmail = editedCase.ReviewerEmail;
-            caseToUpdate.ApproverID = editedCase.ApproverID;
-            caseToUpdate.ApproverEmail = editedCase.ApproverEmail;
-            caseToUpdate.DateCreated = editedCase.DateCreated;
-            caseToUpdate.DateReviewed = editedCase.DateReviewed;
-            caseToUpdate.DateApproved = editedCase.DateApproved;
+            //caseToUpdate.WorkerID = editedCase.WorkerID;
+            //caseToUpdate.WorkerEmail = editedCase.WorkerEmail;
+            //caseToUpdate.ReviewerID = editedCase.ReviewerID;
+            //caseToUpdate.ReviewerEmail = editedCase.ReviewerEmail;
+            //caseToUpdate.ApproverID = editedCase.ApproverID;
+            //caseToUpdate.ApproverEmail = editedCase.ApproverEmail;
+            //caseToUpdate.DateCreated = editedCase.DateCreated;
+            //caseToUpdate.DateReviewed = editedCase.DateReviewed;
+            //caseToUpdate.DateApproved = editedCase.DateApproved;
             caseToUpdate.Status = editedCase.Status;
 
             _dbContext.SaveChanges();

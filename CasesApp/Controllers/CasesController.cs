@@ -71,7 +71,6 @@ namespace CasesApp.Controllers
             return View(@case);
         }
 
-        [Authorize(Roles = "Worker")]
         // GET: Cases/Create
         public IActionResult Create()
         {
@@ -83,24 +82,18 @@ namespace CasesApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> Create([Bind("ID,Title,Details,Worker,CreateDate")] Case @case)
         {
             if (ModelState.IsValid)
             {
-                //  var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //  Httpcon
-                @case.WorkerID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                
-               // @case.WorkerID = await _userManager.FindByIdAsync(userID);
+                @case.WorkerID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;           
                 _caseService.Add(@case);
                 return RedirectToAction(nameof(Index));
             }
             return View(@case);
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Worker")]
+
         // GET: Cases/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -114,6 +107,7 @@ namespace CasesApp.Controllers
             {
                 return NotFound();
             }
+
             return View(@case);
         }
 
@@ -122,7 +116,7 @@ namespace CasesApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Details,Worker,Reviewer,Approver,Status")] Case @case)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Details,WorkerEmail,ReviewerEmail,ApproverEmail,Status")] Case @case)
         {
             if (id != @case.ID)
             {
@@ -133,8 +127,7 @@ namespace CasesApp.Controllers
             {
                 try
                 {
-                    _context.Update(@case);
-                    await _context.SaveChangesAsync();
+                    _caseService.Edit(@case);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

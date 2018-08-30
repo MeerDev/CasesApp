@@ -24,23 +24,9 @@
                 <span asp-validation-for="Details" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="WorkerID" class="control-label"></label>
-                <input asp-for="WorkerID" class="form-control" />
-                <span asp-validation-for="WorkerID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReviewerID" class="control-label"></label>
-                <input asp-for="ReviewerID" class="form-control" />
-                <span asp-validation-for="ReviewerID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApproverID" class="control-label"></label>
-                <input asp-for="ApproverID" class="form-control" />
-                <span asp-validation-for="ApproverID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" asp-items="Html.GetEnumSelectList<CaseStatus>()" class="form-control">
+                </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
